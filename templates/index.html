@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Locate Me</title>
+        <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+        <link rel="stylesheet" href="/static/style.css">
+        <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    </head>
+    <body>
+        <div style="width: 100vw; height: 100vh;"></div>
+        <script>
+            // Initialise the platform object
+            var platform = new H.service.Platform({'apikey': '{{apikey}}'})
+
+            const lat = {{data.latitute}};
+            const lon = {{data.longitute}};
+
+            // Obtain the default map types from the platform object
+            var defaultLayers = platform.createDefaultLayers();
+
+            // Instantiate (and display) a map object
+            var map = new H.map(
+                document.getElementById('mapContainer'),
+                defaultLayers.vector.normal.map,
+                {
+                    zoom: 10,
+                    center: {lat:lat, lng:lon}
+                }
+            );
+
+            const marker = new H.Map.Marker({lat:lat, lng:lon});
+
+            // Add the marker to the map
+            map.addObject(marker);
+        </script>
+        {%if data and data.latitute and data.longitute%}
+            <h1>Details</h1>
+            <p> The latitude is {{data.latitute}}</p>
+            <p> The longitude is {{data.longitute}}</p>
+        
+        {%else%}apikey
+         <p>{{error}}</p>
+        {%endif%}
+    </body>
+</html>
